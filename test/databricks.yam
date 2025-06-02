@@ -1,0 +1,44 @@
+bundle:
+  name: MY_BUNDLE
+include:
+  - resources/*.yaml
+sync:
+  exclude:
+    - mics/
+targets:
+  test:
+    mode: production
+    default: true
+    variables:
+      policy_id: xxxxxxx
+    run_as:
+      service_principal_name: null
+    workspace:
+      host: 'https://<your_workspace>.cloud.databricks.com/'
+      root_path: '/${bundle.name}'
+    permissions:
+      - level:
+          - CAN_MANAGE | CAN_READ | IS_OWNER
+        group_name: <group name>
+      - level:
+          - CAN_MANAGE | CAN_READ | IS_OWNER
+        service_principal_name: <UUID>
+  dev:
+    mode: production
+    default: false
+    variables:
+      policy_id: xxxxxxx
+    run_as: service_principal_name OR user_name
+    workspace:
+      host: 'https://<your_workspace>.cloud.databricks.com/'
+      root_path: '/${bundle.name}'
+    permissions:
+      - level:
+          - CAN_MANAGE | CAN_READ | IS_OWNER
+        group_name: <group name>
+      - level:
+          - CAN_MANAGE | CAN_READ | IS_OWNER
+        service_principal_name: <UUID>
+variables:
+  policy_id:
+    description: The cluster policy id
